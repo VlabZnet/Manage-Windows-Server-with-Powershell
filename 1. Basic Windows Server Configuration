@@ -1,0 +1,28 @@
+# Variables used for changing name
+$new_comp_name = "DC01"
+$old_comp_name = $env:COMPUTERNAME
+
+# Variable used for IP addressing
+$adapter = (Get-NetAdapter -Name "Ethernet").InterfaceIndex
+$ip_add = "192.168.1.10"
+$subnet = "24"
+$gate = "192.168.1.254"
+
+# Variable containing DNS server
+$DNS1 = "192.168.1.10"
+$DNS2 = "192.168.1.11"
+
+# Sets new IPv4 Configuration
+New-NetIPAddress `
+    -InterfaceIndex $adapter `
+    -IPAddress $ip_add `
+    -PrefixLength $subnet `
+    -DefaultGateway $gate
+
+# Set DNS servers
+Set-DnsClientServerAddress `
+     -InterfaceIndex $adapter `
+     -ServerAddresses ($DNS1,$DNS2)
+
+# Changes computer name
+Rename-Computer -ComputerName $old_comp_name -NewName $new_comp_name -Restart
