@@ -1,0 +1,23 @@
+	# Variables
+	$DomainName = "vlabz.local"
+	$Cred = Get-Credential
+
+	# Install Active Directory
+	Install-WindowsFeature AD-Domain-Services -IncludeManagementTools -Verbose
+
+	# Paremeters for DC is set in hash
+	$HashArguments = @{
+	    DomainName = $DomainName
+	    Credential = $Cred 
+	    InstallDns = $true
+	    CreateDnsDelegation = $false 
+	    NoGlobalCatalog = $false 
+	    DatabasePath = "C:\Windows\NTDS"
+	    LogPath      = "C:\Windows\NTDS"
+	    SysvolPath   = "C:\Windows\SYSVOL"
+	    NoRebootOnCompletion = $false
+	    Force = $true
+	}
+
+	# Calls on HastArguments to install ADDSDomainController
+	Install-ADDSDomainController @HashArguments -Verbose
